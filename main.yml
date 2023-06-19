@@ -1,0 +1,36 @@
+---
+- hosts: all
+  become: yes
+  ignore_errors: yes
+  tasks:
+      - name: create user
+        user:
+          name: john
+          comment: Admin smith
+          group: root
+      - name: create file
+        file:
+          path: /opt/comfig
+          state: touch
+          mode: '0600'
+      - name: create directory
+        file:
+          path: /opt/ansi-dir
+          state: directory
+          mode: '0755'
+      - name: create group 
+        command: groupadd manager    
+      - name: install apache
+        yum:
+          name: httpd 
+          state: latest
+      - name: start apache
+        service:
+          name: httpd
+          state: started   
+          enabled: yes 
+      - name: Download software
+        get_url:
+          url: https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
+          dest: /opt
+          mode: '0644'       
